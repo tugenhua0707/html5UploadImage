@@ -1,0 +1,141 @@
+input, select, textarea
+  font-size 100%
+a,button,input
+  outline: none
+* 
+  margin 0
+  padding 0
+ul,li 
+  list-style none
+.file
+  position relative
+  display inline-block
+  background #D0EEFF
+  border 1px solid #99D3F5
+  border-radius 4px
+  padding 4px 12px
+  overflow hidden
+  color #1E88C7
+  text-decoration none
+  text-indent 0
+  line-height 20px
+
+.file input 
+  position absolute
+  font-size 100px
+  right 0
+  top 0
+  opacity 0
+.file:hover
+  background #AADFFD
+  border-color #78C3F3
+  color #004974
+  text-decoration none
+
+.upload_box
+  width 800px
+  margin 1rem auto
+  .upload_main
+    border 1px solid #ccc
+    background-color #fbfbfb
+    overflow hidden
+    .upload_choose
+      padding 1rem
+      overflow hidden
+      .upload_drag_area
+        display inline-block
+        width 60%
+        padding 4rem 0;
+        margin-left .5rem
+        border 1px dashed #ddd
+        background #fff
+        color #999
+        text-align center
+        vertical-align middle
+    .upload_preview
+      background-color #fff
+      overflow hidden
+      .upload_append_list
+        margin-left 10px
+        margin-top 12px
+        float left
+        width 102px
+        height 124px
+        p 
+          position relative
+          float left
+          width 100px
+          height 100px
+          border 1px solid #dedede
+          em
+            float left
+            padding 10px
+            font-style normal
+            overflow hidden
+          span.upload_delete 
+            position absolute
+            top -6px
+            right -2px
+            text-decoration none
+            color #333
+            cursor pointer
+            text-align center
+            width 16px
+          img
+            display block
+            width 80px
+            height 80px
+            overflow hidden
+        .upload_progress 
+          display none
+          padding 5px
+          border-radius 10px
+          color #fff
+          background-color rgba(0,0,0,.6)
+          position absolute
+          left 25px
+          top 45px
+        span.filename
+          font-size 12px
+          text-align center
+          display block
+          width 100%
+          margin-top 4px
+          line-height 22px
+          height 22px
+          overflow hidden
+  .upload_submit
+    margin-top 20px
+    .upload_submit_btn
+      border none
+      background rgb(240, 89, 78)
+      padding 2px 15px
+      color #fff
+      border-radius 3px;
+      height 32px
+      font-size 14px
+      cursor pointer
+.upload_drag_hover 
+  border-color: #069 
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, .5)
+  color: #333
+ 
+.upload-progress {
+  font-style:normal;
+  font-size: 12px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 80px;
+  height: 80px;
+  background: #000;
+  opacity: 0.5;
+  text-align: center;
+  line-height: 80px;
+  color: red;
+}
+.upload-progress.success {
+  background: none;
+  opacity: 1;
+} 
+    
