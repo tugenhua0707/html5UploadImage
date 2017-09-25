@@ -23,7 +23,11 @@
       <script type="text/javascript">
         var params = {
           container: '#container',
-          url: ''
+          url: '',
+          dragDrop: false,
+          onDragLeave: function(target) {
+            console.log(111)
+          }
         };
         var uploadImg1 = new UploadImg(params);
         

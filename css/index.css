@@ -18,6 +18,11 @@ li {
 }
 .hidden {
   visibility: hidden !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
+.none {
+  display: none !important;
 }
 .file {
   position: relative;
@@ -34,6 +39,8 @@ li {
 }
 .file input {
   position: absolute;
+  width: 90px;
+  height: 30px;
   font-size: 100px;
   right: 0;
   top: 0;
@@ -46,23 +53,24 @@ li {
   text-decoration: none;
 }
 .upload_box {
-  width: 600px;
+  position: relative;
   margin: 1rem auto;
 }
-.upload_box .upload_main {
+.upload_box {
   border: 1px solid #ccc;
-  background-color: #fbfbfb;
+  background-color: #fcfcfc;
   overflow: hidden;
 }
-.upload_box .upload_main .upload_choose {
+.upload_box .upload_choose {
   padding: 1rem;
+  padding-bottom: 0.8rem;
   overflow: hidden;
 }
-.upload_box .upload_main .upload_choose .upload_drag_area {
-  display: inline-block;
+.upload_box .upload_drag_area {
+  display: block;
   width: 96%;
   padding: 4rem 0;
-  margin-left: 0.5rem;
+  margin: 0px auto 10px;
   border: 1px dashed #ddd;
   background: #fff;
   color: #999;
@@ -71,11 +79,16 @@ li {
 }
 .upload_box .upload_main .upload_preview {
   background-color: #fff;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
   overflow: hidden;
 }
+.upload_box .upload_main .upload_preview ul {
+  width: 99%;
+  margin: 0 auto;
+}
 .upload_box .upload_main .upload_preview .upload_append_list {
-  margin-left: 10px;
-  margin-top: 12px;
+  margin-left: 13px;
   float: left;
   width: 102px;
 }
@@ -131,7 +144,10 @@ li {
   overflow: hidden;
 }
 .upload_box .upload_submit {
-  margin-top: 20px;
+  margin-left: 18px;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  overflow: hidden;
 }
 .upload_box .upload_submit .upload_submit_btn {
   border: none;
@@ -168,7 +184,8 @@ li {
 }
 .ajax-loader {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  margin-top: 6px;
   background: url('../images/ajax-loader.gif') no-repeat 0 0;
   width: 102px;
   height: 15px;
@@ -178,4 +195,19 @@ li {
   background: none;
   text-align: center;
   font-size: 13px;
+}
+.foldbtn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: url(../images/fold.png) no-repeat;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  z-index: 10;
+  background-position: 2px 3px;
+  
+}
+.up {
+  background-position: -14px 3px;
 }

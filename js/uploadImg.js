@@ -14,8 +14,22 @@
    }
    this.container = cfg.container;
 
+   // 外层容器的宽度 默认为600px
+   this.width = cfg.width || 600;
+
    // 是否需要拖曳
-   this.isDragDrop = cfg.dragDrop || true;
+   if (cfg.dragDrop === false) {
+     this.isDragDrop = cfg.dragDrop;
+   } else {
+     this.isDragDrop = true;
+   }
+
+   // 是否显示折叠按钮
+   if (cfg.fold === false) {
+     this.isfold = cfg.fold;
+   } else {
+     this.isfold = true;
+   }
 
    // 上传url 
    this.url = cfg.url || '';
@@ -47,23 +61,32 @@
       var inputDOM = $(this.container).html();
       var containerId = $(this.container).attr('id');
       this.containerId = containerId;
-      var html = '<div class="upload_box">' + 
-                  '<div class="upload_main">' + 
+      var html = '<div class="upload_box" style="width:'+this.width+'px">' + 
+                  '<div class="upload-inner">' + 
                     '<div class="upload_choose">' + 
                       '<div id="form_'+containerId+'"></div>' +
-                      '<div id="file_'+containerId+'"></div>'+
                     '</div>' + 
-                    '<ul id="preview_'+containerId+'" class="upload_preview"></ul>' + 
-                  '</div>' +
-                  '<div class="upload_submit">' + 
-                    '<input type="submit" id="btn_'+containerId+'" class="upload_submit_btn" value="上传图片" />' + 
+                    '<div class="upload_main">' + 
+                      '<div id="file_'+containerId+'"></div>'+
+                      '<div class="upload_preview none">' + 
+                        '<ul id="preview_'+containerId+'"></ul>' + 
+                      '</div>' +
+                      '<div class="upload_submit none">' + 
+                        '<input type="submit" id="btn_'+containerId+'" class="upload_submit_btn" value="上传图片" />' + 
+                      '</div>' + 
+                    '</div>' +
                   '</div>' + 
                 '</div>';
       $(this.container).html(html);
       $("#form_"+containerId).html(inputDOM);
+
       // 如果支持拖曳的话
       if (this.isDragDrop) {
         $("#file_"+containerId).html('<span id="drag_'+containerId+'" class="upload_drag_area">或者将图片拖到此处</span>');
+      }
+      // 如果需要折叠按钮的话
+      if (this.isfold) {
+        $(this.container).find('.upload-inner').prepend("<span class='foldbtn'></span>");
       }
     },
     bindEnv: function() {
@@ -100,6 +123,14 @@
           self.funGetFiles(e);
         }, false);
       }
+
+      // 折叠操作
+      if (this.isfold) {
+        var foldbtn = $(this.container).find('.foldbtn')[0];
+        foldbtn.addEventListener('click', function(e) {
+          self.foldDiv(e);
+        }, false);
+      }
     },
     dragHover: function(e) {
       e.preventDefault();
@@ -109,7 +140,11 @@
       } else {
         $(e.target).removeClass('upload_drag_hover');
       }
-      this[e.type === 'dragover' ? 'onDragOver' : 'onDragLeave'].call(e.target);
+      if (e.type === 'dragover') {
+        this.onDragOver && this.onDragOver.call(e.target);
+      } else {
+        this.onDragLeave && this.onDragLeave.call(e.target);
+      }
       return this;
     },
     // 选择文件组的过滤方法 返回所有过滤后的文件
@@ -124,6 +159,17 @@
       }
       return arrFiles;
     },
+    // 折叠操作
+    foldDiv: function(e) {
+      var target = e.target;
+      if (!$(target).hasClass("up")) {
+        $(target).addClass('up');
+        $(this.container).find('.upload_main').slideUp();
+      } else {
+        $(target).removeClass('up');
+        $(this.container).find('.upload_main').slideDown();
+      }
+    },
     onSelect: function(files) {
       var self = this;
       var html = '',
@@ -134,8 +180,8 @@
           var reader = new FileReader();
           reader.onload = function(e) {
             var progressCls = file.successStatus ? 'upload-progress success' : 'upload-progress';
-            var loaderCls  =  file.successStatus ? 'ajax-loader' : (file.failStatus ?  'ajax-loader upload-fail': 'ajax-loader hidden');
-            var failHTML = file.failStatus ? '请求上传失败' : '';
+            var loaderCls  =  file.successStatus ? 'ajax-loader hidden' : (file.failStatus ?  'ajax-loader upload-fail': 'ajax-loader hidden');
+            var failHTML = file.failStatus ? '图片上传失败' : '';
 
             html += '<li id="uploadList_'+ i +'" class="upload_append_list">'+
                       '<span class="'+loaderCls+'" id="loader_'+self.containerId+i+'">'+failHTML+'</span>'+
@@ -154,6 +200,7 @@
           reader.readAsDataURL(file);
         } else {
           $("#preview_"+self.containerId).html(html);
+          self.listCls();
           if (html) {
             // 删除操作
             $('.upload_delete').click(function() {
@@ -164,6 +211,25 @@
         }
       };
       funAppendImage();
+    },
+    listCls: function() {
+      if (this.fileFilter.length > 0) {
+        $(this.container).find('.upload_preview').removeClass('none');
+        $(this.container).find('.upload_submit').removeClass('none');
+      } else {
+        $(this.container).find('.upload_preview').addClass('none');
+        $(this.container).find('.upload_submit').addClass('none');
+      }
+    },
+    hideProcess: function() {
+      if (this.fileFilter.length > 0) {
+        for (var i = 0, ilen = this.fileFilter.length; i < ilen; i++) {
+          var file = this.fileFilter[i];
+          if (file.successStatus) {
+            $("#loader_"+this.containerId + i).addClass('hidden');
+          }
+        }
+      }
     },
     funGetFiles: function(e) {
       // 文件选择或拖动 需要调用该方法 同时阻止浏览器默认操作(打开该图片操作)
@@ -197,11 +263,13 @@
       if (self.fileFilter.length) {
         for(var i = 0, ilen = self.fileFilter.length; i < ilen; i++) {
           var file = self.fileFilter[i];
-          $("#loader_"+self.containerId +i).removeClass('hidden');
           if (!file.successStatus) {
             var formdata = new FormData();
+            // imgFile 输入框
             formdata.append('imgFile', file);
+            $("#loader_"+self.containerId +i).removeClass('hidden');
             (function(file){
+              /*
               $.ajax({
                 url: self.url,
                 type: 'POST',
@@ -218,9 +286,11 @@
                 success: function(data) {
                   //返回的数据格式为 var data = {url: ''};
                   $(self.container).find('#uploadList_'+file.index).addClass('success');
+                  $(self.container).find('#uploadList_'+file.index).find('.upload-progress').addClass("success");
                   file.successStatus = 1;
                   file.imgData = data;
-                  $("#loader_"+self.containerId + file.index).addClass('hidden');
+                  // 隐藏进度条
+                  self.hideProcess();
                   var inputValue = $("#form_"+self.containerId + ' input[type="hidden"]').val();
                   if (inputValue) {
                     inputValue = inputValue + "|" + data.url;
@@ -233,16 +303,19 @@
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                   $(self.container).find('#uploadList_'+file.index).removeClass('success');
                   file.failStatus = 1;
-                  $("#loader_"+self.containerId +file.index).removeClass('hidden').addClass('upload-fail').html('请求上传失败!');
+                  $("#loader_"+self.containerId +file.index).removeClass('hidden').addClass('upload-fail').html('图片上传失败!');
                   self.onFailure && self.onFailure(file, XMLHttpRequest, textStatus, errorThrown);
                 }
               })
-              /*
+              */
+              
               var data = {url: 'xxxxx'};
               $(self.container).find('#uploadList_'+file.index).addClass('success');
+              $(self.container).find('#uploadList_'+file.index).find('.upload-progress').addClass("success");
               file.successStatus = 1;
               file.imgData = data;
-              $("#loader_"+self.containerId + i).addClass('hidden');
+              // 隐藏进度条
+              self.hideProcess();
               var inputValue = $("#form_"+self.containerId + ' input[type="hidden"]').val();
               if (inputValue) {
                 inputValue = inputValue + "|" + data.url;
@@ -251,7 +324,7 @@
               }
               $("#form_"+self.containerId + ' input[type="hidden"]').val(inputValue);
               self.onSuccess && self.onSuccess(file, data);
-              */
+              
             })(file);
           }
         }
@@ -267,6 +340,8 @@
 
       // 重新设置隐藏域的值
       self.resetSetValue(file);
+      this.listCls();
+
       // 删除回调
       this.onDelete(file);
       return this;
