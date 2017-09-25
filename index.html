@@ -1,31 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-</head>
-<body>
-  <div class='upload_box'>
-    <div class='upload_main'>
-      <div class='upload_choose'>
-      <form id='formId'>
-         <a href="javascript:void(0)" class="file">选择文件
-           <input id='fileImage' type='file' multiple name='imgFile' accept = 'image/gif,image/jpeg,image/jpg,image/png' />
+ <html>
+    <head>
+        <meta charset="utf-8">
+        <title>标题</title>
+        <link href="./css/index.css" rel="stylesheet"/>
+        <script type="text/javascript" src="./js/jquery.js"></script>
+        <script type="text/javascript" src="./js/uploadImg.js"></script>
+    </head>
+    <body>
+      <div id="container">
+        <a href="javascript:void(0)" class="file">选择文件
+           <input type='file' multiple name='imgFile' accept = 'image/gif,image/jpeg,image/jpg,image/png' />
+           <input type="hidden" />
          </a>
-       </form>
-       <span id='fileDragArea' class='upload_drag_area'>或者将图片拖到此处</span>
       </div>
-      <ul id='preview' class='upload_preview'></ul>
-    </div>
-    <div class='upload_submit'>
-      <input type='submit' id='submit' class='upload_submit_btn' value='上传图片' />
-    </div>
-    <div id="uploadInf" class="upload_inf"></div>
-  </div>
-	<script src='/src/libs/jquery-1.11.0.min.js'></script>
-  <script src='/assets/bundle.js'></script>
-  <script>
-    
-  </script>
-</body>
+      <div id="container2">
+        <a href="javascript:void(0)" class="file">选择文件
+           <input type='file' multiple name='imgFile' accept = 'image/gif,image/jpeg,image/jpg,image/png' />
+           <input type="hidden" />
+         </a>
+      </div>
+      <script type="text/javascript">
+        var params = {
+          container: '#container',
+          url: ''
+        };
+        var uploadImg1 = new UploadImg(params);
+        
+        // 多个情况下
+        var params2 = {
+          container: '#container2',
+          url: ''
+        };
+        var uploadImg2 = new UploadImg(params2);
+      </script>
+    </body>
 </html>
