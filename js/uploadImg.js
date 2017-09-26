@@ -4,6 +4,24 @@
  * 支持手动上传和拖曳
  * @author {kongzhi@tongbanjie.com}
  * @date 2017/9/25
+   HTML使用方式如下代码：
+   <div id="container">
+    <a href="javascript:void(0)" class="file">选择文件
+       <input type='file' multiple accept = 'image/gif,image/jpeg,image/jpg,image/png' />
+       <input type="hidden" />
+     </a>
+   </div>
+   javascript调用方式如下：
+   var params = {
+     container: '#container',
+     url: '',
+     dragDrop: false,
+     onDragLeave: function(target) {
+       console.log(111)
+     }
+   };
+   new UploadImg(params);
+   如上调用即可初始化。
  */
 
  function UploadImg(cfg) {
@@ -33,6 +51,9 @@
 
    // 上传url 
    this.url = cfg.url || '';
+
+   // 上传文件到服务器端fileName字段 默认为 imgFile, 也可以根据服务器端需要什么字段 自己自定义
+   this.fileName = cfg.fileName || 'imgFile'; 
 
    // 上传文件保存后数组
    this.fileFilter = [];
@@ -265,8 +286,8 @@
           var file = self.fileFilter[i];
           if (!file.successStatus) {
             var formdata = new FormData();
-            // imgFile 输入框
-            formdata.append('imgFile', file);
+            // 上传到服务器的字段名称
+            formdata.append(self.fileName, file);
             $("#loader_"+self.containerId +i).removeClass('hidden');
             (function(file){
               /*
