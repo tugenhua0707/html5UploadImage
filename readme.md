@@ -7,16 +7,12 @@
         <input type="hidden" />
       </a>
     </div>
-<p>javascript调用方式如下：</p>
-<pre>
-  <code>
+#### javascript调用方式如下：
     var params = {
       container: '#container',
       url: ''
     };
     new UploadImg(params);
-  </code>
-</pre>
 <p>如上调用即可初始化。</p>
 <div>
   <p>如上代码说明：</p>
