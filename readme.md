@@ -40,3 +40,7 @@
 | onDelete      |  文件被删除的回调              | file (被删除的文件对象)                                                 | 
 | onDragOver    | 文件被拖曳到该区域时的方法       | 无                                                                   | 
 | onDragLeave   |  文件离开到敏感区域时           | 无                                                                   | 
+
+### 页面查看效果 预览如下地址
+
+<p><a href="https://tugenhua0707.github.io/html5UploadImage/index.html" target="_blank">https://tugenhua0707.github.io/html5UploadImage/index.html</a></p>

@@ -23,7 +23,6 @@
    new UploadImg(params);
    如上调用即可初始化。
  */
-
  function UploadImg(cfg) {
 
    if (!cfg.container) {
@@ -329,6 +328,7 @@
                 }
               })
               */
+              // 模拟数据如下：
               setTimeout(function(){
                 var data = {url: 'xxxxx'};
                 $(self.container).find('#uploadList_'+file.index).addClass('success');
@@ -345,7 +345,7 @@
                 }
                 $("#form_"+self.containerId + ' input[type="hidden"]').val(inputValue);
                 self.onSuccess && self.onSuccess(file, data);
-              }, 5000);
+              }, 3000);
             })(file);
           }
         }
