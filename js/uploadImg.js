@@ -308,23 +308,23 @@
                 }
               })
               */
-              
-              var data = {url: 'xxxxx'};
-              $(self.container).find('#uploadList_'+file.index).addClass('success');
-              $(self.container).find('#uploadList_'+file.index).find('.upload-progress').addClass("success");
-              file.successStatus = 1;
-              file.imgData = data;
-              // 隐藏进度条
-              self.hideProcess();
-              var inputValue = $("#form_"+self.containerId + ' input[type="hidden"]').val();
-              if (inputValue) {
-                inputValue = inputValue + "|" + data.url;
-              } else {
-                inputValue = data.url;
-              }
-              $("#form_"+self.containerId + ' input[type="hidden"]').val(inputValue);
-              self.onSuccess && self.onSuccess(file, data);
-              
+              setTimeout(function(){
+                var data = {url: 'xxxxx'};
+                $(self.container).find('#uploadList_'+file.index).addClass('success');
+                $(self.container).find('#uploadList_'+file.index).find('.upload-progress').addClass("success");
+                file.successStatus = 1;
+                file.imgData = data;
+                // 隐藏进度条
+                self.hideProcess();
+                var inputValue = $("#form_"+self.containerId + ' input[type="hidden"]').val();
+                if (inputValue) {
+                  inputValue = inputValue + "|" + data.url;
+                } else {
+                  inputValue = data.url;
+                }
+                $("#form_"+self.containerId + ' input[type="hidden"]').val(inputValue);
+                self.onSuccess && self.onSuccess(file, data);
+              }, 5000);
             })(file);
           }
         }
