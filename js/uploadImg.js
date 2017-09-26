@@ -120,7 +120,7 @@
       // 文件上传操作
       var upBotton = $("#btn_"+this.containerId)[0];
       upBotton.addEventListener('click', function(e) {
-        self.uploadFiles(e);
+        self.uploadFiles();
       }, false);
 
       // 是否需要拖曳效果
@@ -206,15 +206,15 @@
           reader.onload = function(e) {
             var progressCls = file.successStatus ? 'upload-progress success' : 'upload-progress';
             var loaderCls  =  file.successStatus ? 'ajax-loader hidden' : (file.failStatus ?  'ajax-loader upload-fail': 'ajax-loader hidden');
-            var failHTML = file.failStatus ? '图片上传失败' : '';
 
             html += '<li id="uploadList_'+ i +'" class="upload_append_list">'+
-                      '<span class="'+loaderCls+'" id="loader_'+self.containerId+i+'">'+failHTML+'</span>'+
+                      '<div class="m-layer none" id="m-layer_'+self.containerId+i+'"></div>' + 
+                      '<span class="'+loaderCls+'" id="loader_'+self.containerId+i+'"></span>'+
                       '<p>'+
-                        '<span href="javascript:void(0)" class="upload_delete" title="删除" data-index="'+ i +'">x</span>' +
+                        '<span href="javascript:void(0)" class="upload_delete" title="删除" data-index="'+ i +'"></span>' +
                         '<i class="'+progressCls+'"></i>' + 
                         '<em>' + 
-                          '<img id="uploadImage_' + i + '" src="' + e.target.result + '" class="upload_image" data-file="'+JSON.stringify(file)+'"/>'+
+                          '<img id="uploadImage_' + i + '" src="' + e.target.result + '" class="upload_image" />'+
                         '</em>' + 
                       '</p>'+ 
                       '<a class="filename" title="'+file.name+'">' + file.name + '</a>'+
@@ -245,6 +245,7 @@
           var file = this.fileFilter[i];
           if (file.successStatus) {
             $("#loader_"+this.containerId + i).addClass('hidden');
+            $("#m-layer_"+this.containerId + i).addClass('none');
           }
         }
       }
@@ -276,7 +277,7 @@
         return this;
       }
     },
-    uploadFiles: function(e) {
+    uploadFiles: function() {
       var self = this;
       if (self.fileFilter.length) {
         for(var i = 0, ilen = self.fileFilter.length; i < ilen; i++) {
@@ -286,6 +287,8 @@
             // 上传到服务器的字段名称
             formdata.append(self.fileName, file);
             $("#loader_"+self.containerId +i).removeClass('hidden');
+            $("#m-layer_"+self.containerId +i).removeClass('none');
+
             (function(file){
               /*
               $.ajax({
@@ -293,6 +296,7 @@
                 type: 'POST',
                 cache: false,
                 data: formdata,
+                timeout: 5000,
                 //必须false才会避开jQuery对 formdata 的默认处理 
                 // XMLHttpRequest会对 formdata 进行正确的处理
                 processData: false,
@@ -321,11 +325,13 @@
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                   $(self.container).find('#uploadList_'+file.index).removeClass('success');
                   file.failStatus = 1;
-                  $("#loader_"+self.containerId +file.index).removeClass('hidden').addClass('upload-fail').html('图片上传失败!');
+                  $("#loader_"+self.containerId +file.index).removeClass('hidden').addClass('upload-fail');
+                  $("#m-layer_"+self.containerId +file.index).addClass('none');
                   self.onFailure && self.onFailure(file, XMLHttpRequest, textStatus, errorThrown);
                 }
               })
               */
+              
               // 模拟数据如下：
               setTimeout(function(){
                 var data = {url: 'xxxxx'};
@@ -344,6 +350,7 @@
                 $("#form_"+self.containerId + ' input[type="hidden"]').val(inputValue);
                 self.onSuccess && self.onSuccess(file, data);
               }, 3000);
+              
             })(file);
           }
         }

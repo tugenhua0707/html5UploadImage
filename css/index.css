@@ -88,7 +88,9 @@ li {
   margin: 0 auto;
 }
 .upload_box .upload_main .upload_preview .upload_append_list {
+  position: relative;
   margin-left: 13px;
+  margin-top: 10px;
   float: left;
   width: 102px;
 }
@@ -107,13 +109,14 @@ li {
 }
 .upload_box .upload_main .upload_preview .upload_append_list p span.upload_delete {
   position: absolute;
-  top: -6px;
-  right: -2px;
-  text-decoration: none;
-  color: #333;
+  top: 3px;
+  right: 2px;
+  background: url('../images/cuo.png') no-repeat 0 0;
   cursor: pointer;
   text-align: center;
-  width: 16px;
+  width: 14px;
+  height: 14px;
+  background-size: 14px 14px;
 }
 .upload_box .upload_main .upload_preview .upload_append_list p img {
   display: block;
@@ -136,7 +139,6 @@ li {
   text-align: center;
   display: block;
   width: 100%;
-  margin-top: 4px;
   line-height: 22px;
   height: 22px;
   white-space: nowrap;
@@ -168,33 +170,34 @@ li {
   font-style: normal;
   font-size: 12px;
   position: absolute;
-  left: 10px;
-  top: 10px;
   width: 80px;
   height: 80px;
-  background: #000;
-  opacity: 0.5;
   text-align: center;
   line-height: 80px;
   color: #f00;
 }
 .upload-progress.success {
-  background: none;
-  opacity: 1;
+  background: url('../images/gou.png') no-repeat 0 0;
+  width: 50px;
+  height: 50px;
+  top: 26px;
+  left: 26px;
 }
 .ajax-loader {
-  display: block;
-  margin-bottom: 8px;
-  margin-top: 6px;
-  background: url('../images/ajax-loader.gif') no-repeat 0 0;
-  width: 102px;
-  height: 15px;
-  background-size: 102px 15px;
+  position: absolute;
+  top: 35px;
+  left: 35px;
+  background: url('../images/juhua.gif') no-repeat 0 0;
+  width: 32px;
+  height: 32px;
+  z-index: 10;
 }
 .upload-fail {
-  background: none;
-  text-align: center;
-  font-size: 13px;
+  background: url('../images/delete.png') no-repeat 0 0;
+  top: 26px;
+  left: 26px;
+  width: 50px;
+  height: 50px;
 }
 .foldbtn {
   position: absolute;
@@ -210,4 +213,12 @@ li {
 }
 .up {
   background-position: -14px 3px;
+}
+.m-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 102px;
+  height: 102px;
+  z-index: 9;
 }
