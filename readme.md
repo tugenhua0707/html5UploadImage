@@ -1,26 +1,18 @@
 
 ### js 图片上传控件
-<p>HTML使用方式如下代码：</p>
-<pre>
-  <code>
-      <div id="container">
-        <a href="javascript:void(0)" class="file">选择文件
-          <input type='file' multiple accept = 'image/gif,image/jpeg,image/jpg,image/png' />
-          <input type="hidden" />
-        </a>
-      </div>
-  </code>
-</pre>
+####  HTML使用方式如下代码:
+    <div id="container">
+      <a href="javascript:void(0)" class="file">选择文件
+        <input type='file' multiple accept = 'image/gif,image/jpeg,image/jpg,image/png' />
+        <input type="hidden" />
+      </a>
+    </div>
 <p>javascript调用方式如下：</p>
 <pre>
   <code>
     var params = {
       container: '#container',
-      url: '',
-      dragDrop: false,
-      onDragLeave: function(target) {
-        console.log(111)
-      }
+      url: ''
     };
     new UploadImg(params);
   </code>
