@@ -44,3 +44,6 @@
 ### 页面查看效果 预览如下地址
 
 <p><a href="https://tugenhua0707.github.io/html5UploadImage/index.html" target="_blank">https://tugenhua0707.github.io/html5UploadImage/index.html</a></p>
+
+<h3>注意：</h3>
+<p>IE10-浏览器不支持formData传递数据，因此使用IE9浏览器下可能会报错，不支持，所以如果需要支持IE9的话，可能不通用，一直使用mac电脑，所以IE9没有兼容~</p>
