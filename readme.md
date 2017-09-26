@@ -1,13 +1,19 @@
 
 ### js 图片上传控件
 <p>HTML使用方式如下代码：</p>
+<pre>
+  <code>
     <div id="container">
      <a href="javascript:void(0)" class="file">选择文件
        <input type='file' multiple name='imgFile' accept = 'image/gif,image/jpeg,image/jpg,image/png' />
        <input type="hidden" />
      </a>
     </div>
+  </code>
+</pre>
 <p>javascript调用方式如下：</p>
+<pre>
+  <code>
     var params = {
       container: '#container',
       url: '',
@@ -17,8 +23,10 @@
       }
     };
     new UploadImg(params);
+  </code>
+</pre>
 <p>如上调用即可初始化。</p>
-#### Javascript 相对应的API如下：
+####  Javascript 相对应的API如下：
 
 ####  组件API
 |      属性      |             说明                                                 |     类型          |     默认值       |
