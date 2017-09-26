@@ -151,6 +151,11 @@
           self.foldDiv(e);
         }, false);
       }
+
+      // 删除操作
+      $(this.container).on('click', '.upload_delete', function() {
+        self.deleteFile(parseInt($(this).attr('data-index')));
+      });
     },
     dragHover: function(e) {
       e.preventDefault();
@@ -209,7 +214,7 @@
                         '<span href="javascript:void(0)" class="upload_delete" title="删除" data-index="'+ i +'">x</span>' +
                         '<i class="'+progressCls+'"></i>' + 
                         '<em>' + 
-                          '<img id="uploadImage_' + i + '" src="' + e.target.result + '" class="upload_image" />'+
+                          '<img id="uploadImage_' + i + '" src="' + e.target.result + '" class="upload_image" data-file="'+JSON.stringify(file)+'"/>'+
                         '</em>' + 
                       '</p>'+ 
                       '<a class="filename" title="'+file.name+'">' + file.name + '</a>'+
@@ -221,13 +226,6 @@
         } else {
           $("#preview_"+self.containerId).html(html);
           self.listCls();
-          if (html) {
-            // 删除操作
-            $('.upload_delete').click(function() {
-               self.deleteFile(files[parseInt($(this).attr('data-index'))]);
-               return;
-            });
-          }
         }
       };
       funAppendImage();
@@ -352,25 +350,23 @@
       }
     },
     // 删除对应的文件
-    deleteFile: function(file) {
-      var self = this;
-      var arrs = [];
+    deleteFile: function(index) {
+
       // 清空input输入框的值
       $("#form_"+this.containerId + ' input[type="file"]').eq(0).val('');
-      $(this.container + " #uploadList_" + file.index).eq(0).fadeOut();
-
+      $(this.container + " #uploadList_" + index).eq(0).fadeOut();
       // 重新设置隐藏域的值
-      self.resetSetValue(file);
+      this.resetSetValue(index);
       this.listCls();
 
       // 删除回调
-      this.onDelete(file);
+      this.onDelete(index);
       return this;
     },
-    indexOf: function(item, arrs){
+    indexOf: function(index, arrs){
       if (arrs.length) {
         for (var i = 0, ilen = arrs.length; i < ilen; i++) {
-          if (arrs[i].name == item.name) {
+          if (arrs[i].index == index) {
             return i;
           }
         }
@@ -378,19 +374,27 @@
       return -1;
     },
     // 重新设置隐藏域的值
-    resetSetValue: function(file) {
+    resetSetValue: function(index) {
       var hiddenValues = [];
-      var index = this.indexOf(file, this.fileFilter);
-      if (index > -1) {
+      var index = this.indexOf(index, this.fileFilter);
+      if (index !== -1) {
         this.fileFilter.splice(index, 1);
       }
       if (this.fileFilter.length) {
         for (var j = 0, jlen = this.fileFilter.length; j < jlen; j++) {
-          var url = this.fileFilter[j].imgData ? this.fileFilter[j].imgData.url : '';
-          hiddenValues.push(url);
+          // 判断是否已经上传了
+          if (this.fileFilter[j].successStatus) {
+            var url = this.fileFilter[j].imgData ? this.fileFilter[j].imgData.url : '';
+            hiddenValues.push(url);
+          }
         }
       }
-      $("#form_"+this.containerId + ' input[type="hidden"]').val(hiddenValues.join(',').replace(/,/g, '|'));
+      if (hiddenValues.length >= 2) {
+        $("#form_"+this.containerId + ' input[type="hidden"]').val(hiddenValues.join(',').replace(/,/g, '|'));
+      } else {
+        $("#form_"+this.containerId + ' input[type="hidden"]').val(hiddenValues.join(','));
+      }
+      
     }
  };
  window.UploadImg = UploadImg;
