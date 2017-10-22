@@ -8,12 +8,26 @@
       </a>
     </div>
 #### javascript调用方式如下：
+    var data = [
+      {
+        "url": 'https://img.alicdn.com/tfs/TB11nHZXWagSKJjy0FgXXcRqFXa-218-46.png'
+      },
+      {
+        "url": 'https://img.alicdn.com/simba/img/TB1WT41SVXXXXaSXpXXSutbFXXX.jpg'
+      }
+    ];
     var params = {
       container: '#container',
-      url: ''
+      url: '',
+      dragDrop: false,
+      data: data,   
+      onDragLeave: function(target) {
+        console.log(111)
+      }
     };
-    new UploadImg(params);
+    var uploadImg1 = new UploadImg(params);
 <p>如上调用即可初始化。</p>
+<h3>注意：data选项是指编辑页面的时候，页面本来有数据的项，传递参数方式为数组方式，如上data参数</h3>
 <div>
   <p>如上代码说明：</p>
   <p>1. 最外层容器定义id或class都是在页面上需要唯一的且必须要传递的，因此传递参数container是区分是哪部分的上传区域的</p>
@@ -31,6 +45,7 @@
 |   fold        |  是否需要折叠按钮                                                  | Boolean           |  true          |
 |   url         |  上传图片的地址 [必须的参数]                                        | String             |   ''          |
 |   fileName    |  上传到服务器端图片的字段名                                         | String             |   'imgFile'    |
+|   data        |  页面初始化图片的数据                                              | Array              |   []          |
 
 ####  回调方法
 |     方法名     |             说明             |     返回参数                                                          | 

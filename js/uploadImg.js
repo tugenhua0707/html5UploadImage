@@ -51,6 +51,9 @@
    // 上传url 
    this.url = cfg.url || '';
 
+   // data 数据 页面默认显示图片的数据
+   this.data = cfg.data || [];
+
    // 上传文件到服务器端fileName字段 默认为 imgFile, 也可以根据服务器端需要什么字段 自己自定义
    this.fileName = cfg.fileName || 'imgFile'; 
 
@@ -78,6 +81,7 @@
  }
  UploadImg.prototype = {
     init: function() {
+      var self = this;
       var inputDOM = $(this.container).html();
       var containerId = $(this.container).attr('id');
       this.containerId = containerId;
@@ -108,6 +112,74 @@
       if (this.isfold) {
         $(this.container).find('.upload-inner').prepend("<span class='foldbtn'></span>");
       }
+      // 如果页面初始化有值的话
+      if (this.data.length) {
+        var html = '';
+        var arrs = [];
+        for (var a = 0, alen = this.data.length; a < alen; a++) { 
+          html += '<li id="uploadList_'+ a +'" class="upload_append_list success">'+
+                    '<div class="m-layer none" id="m-layer_'+self.containerId+a+'"></div>' + 
+                    '<span class="ajax-loader hidden" id="loader_'+self.containerId+a+'"></span>'+
+                    '<p>'+
+                      '<span href="javascript:void(0)" class="upload_delete" title="删除" data-index="'+ a +'"></span>' +
+                      '<i class="upload-progress success"></i>' + 
+                      '<em>' + 
+                        '<img id="uploadImage_' + a + '" src="' + this.data[a].url + '" class="upload_image" />'+
+                      '</em>' + 
+                    '</p>'+ 
+                    '<a class="filename" title="'+this.data[a].name+'">' + this.data[a].name + '</a>'+
+                  '</li>';
+          var imgUrl = this.data[a].url;
+          arrs.push(imgUrl);
+          var image = new Image();
+          image.crossOrigin = '';
+          image.src = imgUrl;
+          (function(a, imgUrl, image){
+            image.onload = function() {
+              var base64 = self.getBase64Image(image);
+              var blob = self.convertBase64UrlToBlob(base64);
+              blob.successStatus = 1;
+              blob.index = a;
+              blob.name = imgUrl;
+              blob.imgData = {url: imgUrl};
+              self.fileFilter.push(blob);
+            } 
+          })(a, imgUrl, image);
+        }
+        $(this.container).find('.upload_preview').removeClass('none');
+        $("#preview_"+self.containerId).html(html);
+        $("#form_"+self.containerId + ' input[type="hidden"]').val(arrs.join('|'));
+      }
+    },
+    getBase64Image(img) {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+      var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
+      var dataURL = canvas.toDataURL("image/"+ext);
+      return {
+        dataURL: dataURL,
+        type: "image/"+ext
+      };
+    },
+    /**  
+     * 将以base64的图片url数据转换为Blob  
+     * @param urlData  
+     * 用url方式表示的base64图片数据  
+     */ 
+    convertBase64UrlToBlob(base64) {
+      var urlData =  base64.dataURL;
+      var type = base64.type;
+      var bytes = window.atob(urlData.split(',')[1]); //去掉url的头，并转换为byte
+      //处理异常,将ascii码小于0的转换为大于0  
+      var ab = new ArrayBuffer(bytes.length);  
+      var ia = new Uint8Array(ab);  
+      for (var i = 0; i < bytes.length; i++) {  
+          ia[i] = bytes.charCodeAt(i);  
+      }  
+      return new Blob( [ab] , {type : type});  
     },
     bindEnv: function() {
       var self = this;
@@ -223,7 +295,7 @@
             funAppendImage();
           }
           reader.readAsDataURL(file);
-        } else {
+        }else {
           $("#preview_"+self.containerId).html(html);
           self.listCls();
         }
@@ -253,7 +325,6 @@
     funGetFiles: function(e) {
       // 文件选择或拖动 需要调用该方法 同时阻止浏览器默认操作(打开该图片操作)
       this.dragHover(e);
-
       // 获取被选择的文件对象列表
       var files = e.target.files || e.dataTransfer.files;
 
@@ -288,7 +359,6 @@
             formdata.append(self.fileName, file);
             $("#loader_"+self.containerId +i).removeClass('hidden');
             $("#m-layer_"+self.containerId +i).removeClass('none');
-
             (function(file){
               /*
               $.ajax({

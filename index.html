@@ -11,7 +11,7 @@
       <div id="container">
         <a href="javascript:void(0)" class="file">选择文件
            <input type='file' multiple accept = 'image/gif,image/jpeg,image/jpg,image/png' />
-           <input type="hidden" />
+           <input type="hidden" value=""/>
          </a>
       </div>
       <div id="container2">
@@ -21,10 +21,19 @@
          </a>
       </div>
       <script type="text/javascript">
+        var data = [
+          {
+            "url": 'https://img.alicdn.com/tfs/TB11nHZXWagSKJjy0FgXXcRqFXa-218-46.png'
+          },
+          {
+            "url": 'https://img.alicdn.com/simba/img/TB1WT41SVXXXXaSXpXXSutbFXXX.jpg'
+          }
+        ];
         var params = {
           container: '#container',
           url: '',
           dragDrop: false,
+          data: data,
           onDragLeave: function(target) {
             console.log(111)
           }
