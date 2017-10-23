@@ -127,7 +127,7 @@
                         '<img id="uploadImage_' + a + '" src="' + this.data[a].url + '" class="upload_image" />'+
                       '</em>' + 
                     '</p>'+ 
-                    '<a class="filename" title="'+this.data[a].name+'">' + this.data[a].name + '</a>'+
+                    '<a class="filename" title="'+this.data[a].url+'">' + this.data[a].url + '</a>'+
                   '</li>';
           var imgUrl = this.data[a].url;
           arrs.push(imgUrl);
